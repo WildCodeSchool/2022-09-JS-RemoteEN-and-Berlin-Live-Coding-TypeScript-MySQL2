@@ -25,7 +25,7 @@ export const createUser: RequestHandler = (req, res) => {
     });
 };
 
-interface MySQLUserPacket extends User, RowDataPacket {}
+type MySQLUserResult = (User & RowDataPacket)[];
 
 // Refer to this to get more info on Generics:
 // https://www.typescriptlang.org/docs/handbook/2/generics.html
@@ -35,7 +35,7 @@ export const getUserByID: RequestHandler<{
   const { userId } = req.params;
 
   database
-    .query<MySQLUserPacket[]>("SELECT * FROM users WHERE id = ?", [userId])
+    .query<MySQLUserResult>("SELECT * FROM users WHERE id = ?", [userId])
     .then(([result]) => {
       const user = result[0];
       console.log("User ID:", user.id, "User email:", user.email);
